@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Default Prediction</title>
+</head>
+<body>
+    <h2>Default Prediction Model</h2>
+    <form action="/predict" method="post">
+        <label for="client_id">ID Client:</label>
+        <input type="text" id="client_id" name="client_id" required><br><br>
+        <input type="submit" value="Predict">
+    </form>
+    {% if output %}
+        <h3>{{ output }}</h3>
+    {% endif %}
+</body>
+</html>
