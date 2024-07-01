@@ -7,28 +7,28 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Utilise une machine virtuelle Ubuntu pour le workflow
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2  # Action pour récupérer le code source
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2  # Action pour configurer Python
+        uses: actions/setup-python@v2
         with:
-          python-version: '3.x'  # Version de Python à utiliser (ex: 3.8)
+          python-version: '3.x'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt  # Assurez-vous d'adapter cette commande à votre projet
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Run tests
         run: |
-          python -m pytest  # Commande pour exécuter les tests unitaires avec pytest
+          python -m pytest
 
       - name: Build and Deploy
         run: |
           # Commandes pour construire et déployer votre application sur le Cloud
-          # Assurez-vous d'adapter ces commandes à votre stack technologique et à votre Cloud provider
           echo "Build and deploy script goes here"
+
