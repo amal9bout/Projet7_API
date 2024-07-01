@@ -1,48 +1,45 @@
-import numpy as np
+pip install nest_asyncio
+
+import pickle
+from lightgbm import LGBMClassifier
 import pandas as pd
-from flask import Flask, request, render_template
+from fastapi import FastAPI
+import uvicorn
+from pydantic import BaseModel
 import joblib
-import os
+import nest_asyncio
+import asyncio
+
+nest_asyncio.apply()
 
 # Charger le modèle LightGBM
-model= joblib.load("C:\\Users\\amal9\\OneDrive\\Documents\\9-Openclassroom\\8-PROJET 7\\GIT\\lightgbm_model_df1.pkl")
-
+model = joblib.load("C:\\Users\\amal9\\OneDrive\\Documents\\9-Openclassroom\\8-PROJET 7\\GIT\\lightgbm_model_df1.pkl")
 df = pd.read_csv("C:\\Users\\amal9\\OneDrive\\Documents\\9-Openclassroom\\8-PROJET 7\\GIT\\df1_final.csv")
 
-app = Flask(__name__)
+def predict(customer_id):
+    customer_df = df[df.SK_ID_CURR == customer_id]
+    if customer_df.shape[0] == 0:
+        return -1
+    X = customer_df.iloc[:, :-2]
+    score = model.predict_proba(X)[0, 1]
+    return round(score*100, 2)
 
-@app.route('/predict_score', methods=['GET'])
-def predict_score():
-    
-    try:
-        # Récupérez les données d'entrée au format JSON depuis la requête
-        data = request.get_json(force=True)
-        print(data)
-       #Assurez-vous que les données reçues correspondent aux caractéristiques attendues par le modèle
-        input_data = data.get('data')
-        
-        df[df['SK_ID_CURR']==input_data]
-        print(input_data)
-        if input_data is None:
-            return jsonify({'error': 'Missing data field'})
+app = FastAPI()
 
-# Sélectionnez les données du DataFrame correspondant à l'identifiant SK_ID_CURR spécifié
-        client = df[df['SK_ID_CURR'] == input_data]
+class post_data(BaseModel):
+    customer_id: int
 
-# Vérifiez si des données ont été trouvées pour l'identifiant donné
-        if client.empty:
-            return jsonify({'error': 'SK_ID_CURR not found'})
+@app.get('/')
+async def root():
+    return {"Message": "Welcome to Score Prediction API."}
 
-# Utilisez les données sélectionnées pour la prédiction
-        y_pred_classes = model.predict_proba(client.values)[:, 1]  # Obtenez la probabilité de la classe positive
-
-# Convertissez le tableau NumPy en une liste Python avant de le renvoyer dans la réponse JSON
-        y_pred_classes_list = y_pred_classes.tolist()
-# Retournez les scores prédits sous forme de liste
-        return jsonify({'prediction': y_pred_classes_list})
-
-    except Exception as e:
-        return jsonify({'error': str(e)})
+@app.post("/predict")
+def score(input_data: post_data):
+    score = predict(input_data.customer_id)
+    return {"score": score}
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=8887)
+    config = uvicorn.Config(app, host="127.0.0.1", port=8000, log_level="info")
+    server = uvicorn.Server(config)
+    asyncio.run(server.serve())
+
