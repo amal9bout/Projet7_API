@@ -25,10 +25,11 @@ jobs:
 
       - name: Run tests
         run: |
-          python -m pytest
+          python -m pytest  
 
       - name: Build and Deploy
         run: |
           # Commandes pour construire et déployer votre application sur le Cloud
           echo "Build and deploy script goes here"
+
 
