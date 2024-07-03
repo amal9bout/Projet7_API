@@ -16,20 +16,18 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install -r requirements.txt
 
-      - name: Run tests
+      - name: Run unit tests
         run: |
-          python -m pytest  
+          python -m pytest test_app.py
 
-      - name: Build and Deploy
-        run: |
-          # Commandes pour construire et déployer votre application sur le Cloud
-          echo "Build and deploy script goes here"
+      - name: Deploy to production
+        # Ajoutez ici vos étapes de déploiement
 
-
+      # Vous pouvez ajouter d'autres jobs ou étapes ici pour votre workflow
