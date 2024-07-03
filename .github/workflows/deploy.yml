@@ -25,7 +25,7 @@ jobs:
 
       - name: Run unit tests
         run: |
-          python -m pytest tests\unitaires\test_app.py
+          python -m pytest "C:\Users\amal9\OneDrive\Documents\9-Openclassroom\8-PROJET 7\GIT\tests unitaires\test_app.py"
 
       - name: Deploy to production
         # Ajoutez ici vos étapes de déploiement
