@@ -1,5 +1,3 @@
-pip install nest_asyncio
-
 import pickle
 from lightgbm import LGBMClassifier
 import pandas as pd
