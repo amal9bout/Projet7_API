@@ -29,5 +29,7 @@ jobs:
 
       - name: Deploy to production
         # Ajoutez ici vos étapes de déploiement
-
+        run: |
+          echo "Deploying to production..."
+          # Commandes de déploiement
       # Vous pouvez ajouter d'autres jobs ou étapes ici pour votre workflow
