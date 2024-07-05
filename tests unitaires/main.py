@@ -11,8 +11,8 @@ import asyncio
 nest_asyncio.apply()
 
 # Charger le modèle LightGBM
-model = joblib.load("C:\\Users\\amal9\\OneDrive\\Documents\\9-Openclassroom\\8-PROJET 7\\GIT\\lightgbm_model_df1.pkl")
-df = pd.read_csv("C:\\Users\\amal9\\OneDrive\\Documents\\9-Openclassroom\\8-PROJET 7\\GIT\\df1_final.csv")
+model = joblib.load("lightgbm_model_df1.pkl")
+df = pd.read_csv("df1_final.csv")
 
 def predict(customer_id):
     customer_df = df[df.SK_ID_CURR == customer_id]
